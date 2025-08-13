@@ -1,0 +1,17 @@
+{
+  "swaraj": {
+    "username": "swaraj",
+    "email": "swarajsatyam557@gmail.com",
+    "full_name": "SWARAJ",
+    "password_hash": "e40c1c34ac23f77fe5d8c5cadca23eced0657ade0d1df9193a413ac80a8f9d07",
+    "salt": "0632d9573fe7a845ea073fae8300f1992939feffe46cb787a35582e925d1ecf7",
+    "created_at": "2025-08-13T17:18:48.551964",
+    "last_login": "2025-08-13T17:18:56.586589",
+    "is_active": true,
+    "preferences": {
+      "theme": "dark",
+      "voice_enabled": true,
+      "notifications": true
+    }
+  }
+}

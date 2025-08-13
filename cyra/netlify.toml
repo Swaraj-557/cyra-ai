@@ -1,0 +1,48 @@
+# Build settings for static site deployment
+
+[build]
+  # Directory to deploy
+  publish = "."
+  
+  # Build command (not needed for static site)
+  command = "echo 'Static site - no build required'"
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Performance headers
+    Cache-Control = "public, max-age=31536000"
+    
+# Cache control for HTML files
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Cache control for assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Redirects
+[[redirects]]
+  from = "/demo"
+  to = "/#demo"
+  status = 301
+
+[[redirects]]
+  from = "/features"
+  to = "/#features"
+  status = 301
+
+# Environment variables (if needed)
+[build.environment]
+  NODE_ENV = "production"

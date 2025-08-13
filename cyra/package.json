@@ -1,0 +1,46 @@
+{
+  "name": "cyra-ai",
+  "version": "1.0.0",
+  "description": "Cyra AI - Advanced cybersecurity assistant with voice chat and real-time AI responses",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "python -m http.server 8000",
+    "test": "echo \"Visit http://localhost:8000 to test the application\"",
+    "build": "echo \"No build process required for static site\"",
+    "deploy": "echo \"Deployment handled by GitHub Pages\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/cyra-ai.git"
+  },
+  "keywords": [
+    "cybersecurity",
+    "ai-assistant",
+    "voice-chat",
+    "security-tools",
+    "password-generator",
+    "threat-analysis",
+    "github-pages",
+    "responsive-design",
+    "javascript",
+    "html5",
+    "css3"
+  ],
+  "author": "Cyra AI Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-username/cyra-ai/issues"
+  },
+  "homepage": "https://your-username.github.io/cyra-ai/",
+  "browserslist": [
+    "Chrome >= 80",
+    "Firefox >= 75",
+    "Safari >= 13",
+    "Edge >= 80",
+    "iOS >= 13",
+    "Android >= 8"
+  ],
+  "devDependencies": {},
+  "dependencies": {}
+}

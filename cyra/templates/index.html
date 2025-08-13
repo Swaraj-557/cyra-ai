@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ Cyra AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .chat-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tools-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background: #e3f2fd;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .bot-message {
+            background: #f3e5f5;
+        }
+
+        .system-message {
+            background: #fff3e0;
+            font-style: italic;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #2196F3;
+        }
+
+        .btn-secondary:hover {
+            background: #1976D2;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tool-card h3 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tool-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .status-bar {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .typing-indicator {
+            display: none;
+            font-style: italic;
+            opacity: 0.7;
+        }
+
+        .api-demo {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .api-endpoint {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .loader {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ Cyra AI Assistant</h1>
+            <p class="subtitle">Your sophisticated AI-powered cybersecurity companion</p>
+        </header>
+
+        <div class="status-bar">
+            <span id="statusText">🟢 Connected to Cyra AI</span>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-section">
+                <div class="chat-container" id="chatContainer">
+                    <div class="bot-message">
+                        <strong>🛡️ Cyra:</strong> Hello! I'm Cyra, your AI cybersecurity assistant. I'm here to help you with:
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>🔐 Generating secure passwords and passphrases</li>
+                            <li>🔍 Analyzing password strength and security</li>
+                            <li>🌐 Network security advice and best practices</li>
+                            <li>📚 Cybersecurity education and guidance</li>
+                            <li>🛠️ Security tool recommendations</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>Try asking:</strong> "Generate a strong password" or "How can I protect myself from phishing?"</p>
+                    </div>
+                </div>
+                
+                <div class="input-section">
+                    <input type="text" id="messageInput" placeholder="Ask me anything about cybersecurity..." autocomplete="off">
+                    <button class="btn" onclick="sendMessage()">Send</button>
+                    <button class="btn btn-secondary" onclick="clearChat()">Clear</button>
+                </div>
+                
+                <div class="typing-indicator" id="typingIndicator">
+                    Cyra is thinking<span class="loader"></span>
+                </div>
+            </div>
+
+            <div class="tools-panel">
+                <h2>🔧 Quick Tools</h2>
+                
+                <div class="tool-card" onclick="quickTool('password')">
+                    <h3>🔐 Password Generator</h3>
+                    <p>Generate cryptographically secure passwords</p>
+                </div>
+                
+                <div class="tool-card" onclick="quickTool('passphrase')">
+                    <h3>📝 Passphrase Creator</h3>
+                    <p>Create memorable yet secure passphrases</p>
+                </div>
+                
+                <div class="tool-card" onclick="quickTool('strength')">
+                    <h3>🔍 Password Analyzer</h3>
+                    <p>Check your password strength and security</p>
+                </div>
+                
+                <div class="tool-card" onclick="quickTool('advice')">
+                    <h3>💡 Security Advice</h3>
+                    <p>Get expert cybersecurity guidance</p>
+                </div>
+                
+                <div class="tool-card" onclick="quickTool('phishing')">
+                    <h3>🎣 Phishing Protection</h3>
+                    <p>Learn about phishing and how to avoid it</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="api-demo">
+            <h3>🔌 API Endpoints Available</h3>
+            <div class="api-endpoint">POST /chat - Chat with Cyra AI</div>
+            <div class="api-endpoint">POST /tools/password/generate - Generate passwords</div>
+            <div class="api-endpoint">POST /tools/password/strength - Analyze password strength</div>
+            <div class="api-endpoint">GET /cybersecurity/advice/{topic} - Get security advice</div>
+            <div class="api-endpoint">GET /docs - Interactive API documentation</div>
+        </div>
+    </div>
+
+    <script>
+        let conversationHistory = [];
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('messageInput').focus();
+            
+            // Add enter key listener
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTyping(true);
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        user_id: 'web_user_' + Date.now()
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Hide typing indicator
+                showTyping(false);
+                
+                // Add bot response
+                addMessage('bot', data.response);
+                
+                // Show tool results if any
+                if (data.tool_calls && data.tool_calls.length > 0) {
+                    data.tool_calls.forEach(tool => {
+                        addMessage('system', `🔧 Executed: ${tool.tool_name}`);
+                    });
+                }
+                
+            } catch (error) {
+                showTyping(false);
+                addMessage('system', '❌ Sorry, I encountered an error. Please try again.');
+                console.error('Error:', error);
+            }
+        }
+
+        function addMessage(sender, message) {
+            const container = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageDiv.className = 'message user-message';
+                messageDiv.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
+            } else if (sender === 'bot') {
+                messageDiv.className = 'message bot-message';
+                messageDiv.innerHTML = `<strong>🛡️ Cyra:</strong> ${formatBotMessage(message)}`;
+            } else {
+                messageDiv.className = 'message system-message';
+                messageDiv.innerHTML = escapeHtml(message);
+            }
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+            
+            // Store in conversation history
+            conversationHistory.push({sender, message, timestamp: Date.now()});
+        }
+
+        function formatBotMessage(message) {
+            // Simple formatting for bot messages
+            return escapeHtml(message)
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showTyping(show) {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = show ? 'block' : 'none';
+        }
+
+        function clearChat() {
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = `
+                <div class="bot-message">
+                    <strong>🛡️ Cyra:</strong> Chat cleared! How can I help you with cybersecurity today?
+                </div>
+            `;
+            conversationHistory = [];
+        }
+
+        async function quickTool(tool) {
+            const messages = {
+                'password': 'Generate a strong password for me',
+                'passphrase': 'Create a memorable passphrase',
+                'strength': 'How do I check if my password is strong?',
+                'advice': 'Give me some general cybersecurity advice',
+                'phishing': 'How can I protect myself from phishing attacks?'
+            };
+            
+            if (messages[tool]) {
+                document.getElementById('messageInput').value = messages[tool];
+                await sendMessage();
+            }
+        }
+
+        // Update status periodically
+        setInterval(async function() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                const statusText = document.getElementById('statusText');
+                
+                if (data.status === 'healthy') {
+                    statusText.innerHTML = '🟢 Connected to Cyra AI';
+                } else {
+                    statusText.innerHTML = '🟡 Cyra AI partially available';
+                }
+            } catch (error) {
+                document.getElementById('statusText').innerHTML = '🔴 Connection error';
+            }
+        }, 30000); // Check every 30 seconds
+    </script>
+</body>
+</html>

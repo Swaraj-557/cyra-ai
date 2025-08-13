@@ -1,0 +1,78 @@
+# Cyra AI - GitHub Pages Configuration
+
+# Deployment settings
+url: "https://your-username.github.io"
+baseurl: "/cyra-ai"
+
+# Site settings
+title: "Cyra AI - Cybersecurity Assistant"
+description: "Advanced AI-powered cybersecurity assistant with voice chat, real-time threat analysis, and intelligent security tools."
+author: "Cyra AI Team"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO settings
+twitter:
+  username: cyraai
+  card: summary_large_image
+
+social:
+  name: Cyra AI
+  links:
+    - https://twitter.com/cyraai
+    - https://github.com/your-username/cyra-ai
+
+# Exclude from processing
+exclude:
+  - README.md
+  - CONTRIBUTING.md
+  - LICENSE
+  - package.json
+  - node_modules/
+  - vendor/
+  - .github/
+  - src/
+  - tests/
+  - requirements.txt
+  - .env
+  - .env.example
+  - config/
+  - data/
+  - *.py
+
+# Include in processing
+include:
+  - .htaccess
+  - _headers
+  - _redirects
+
+# Sass settings
+sass:
+  style: compressed
+  sass_dir: _sass
+
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+    values:
+      image: "/assets/images/og-image.png"
